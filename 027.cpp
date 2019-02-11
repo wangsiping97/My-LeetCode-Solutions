@@ -21,7 +21,7 @@ class Solution {
 public:
     int removeElement(vector<int>& nums, int val) {
         int count = 0;
-        for (int i = nums.size() - 1; i >= 0; nums[i] == val ? count++, nums[i] = nums[nums.size() - count], nums[nums.size() - count] = val, i-- : i--) ;
+        for (int i = nums.size() - 1; i >= 0; nums[i] == val ? count++, nums[i] = nums[nums.size() - count], i-- : i--) ;
         return nums.size() - count;
     }
 };
