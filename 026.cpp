@@ -20,8 +20,7 @@ class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
         int count = 0;
-        for (int i = 1; i < nums.size(); ) 
-            nums[i] != nums[i - 1] ? nums[++count] = nums[i], i++: i++;
+        for (int i = 1; i < nums.size(); nums[i] != nums[i - 1] ? nums[++count] = nums[i], i++: i++);
         return nums.size() <= 1 ? nums.size() : count + 1;
     }
 };
@@ -32,6 +31,6 @@ int main() {
     vector<int> v(nums, nums + 10);
     int ans = s.removeDuplicates(v);
     cout << ans << endl;
-    for (int i = 0; i < ans; cout << v[i] << " ", i++) 
+    for (int i = 0; i < ans; cout << v[i] << " ", i++);
     return 0;
 }
