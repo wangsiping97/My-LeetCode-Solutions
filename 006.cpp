@@ -29,22 +29,20 @@ using namespace std;
 class Solution {
 public:
     string convert(string s, int numRows) {
-        string ans = "";
-        int l = s.length();
-        if (l == 0) return ans;
+        string ans;
         if (numRows == 1) return s;
+        int l = s.length();
+        ans.reserve(l);
         int k = l / (numRows * 2 - 2);
-        int m = l % (numRows * 2 - 2);
-        s.append(numRows * 2 - 2 - m, ' ');
         for (int j = 0; j < numRows; j++) {
             for (int i = 0; i < 2 *(k + 1); i++) {
                 if (i % 2 == 0) {
-                    if (s[(numRows * 2 - 2) * i / 2 + j] != ' ')
+                    if ((numRows * 2 - 2) * i / 2 + j < l)
                         ans.append(1, s[(numRows * 2 - 2) * i / 2 + j]);
                 }
                 else {
                     if (j != 0 && j != numRows - 1) {
-                        if (s[(numRows * 2 - 2) * (i + 1) / 2 - j] != ' ')
+                        if ((numRows * 2 - 2) * (i + 1) / 2 - j < l)
                             ans.append(1, s[(numRows * 2 - 2) * (i + 1) / 2 - j]);
                     }
                 }
