@@ -39,63 +39,28 @@
 // Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 
 #include <iostream> 
+#include <string>
 using namespace std;
 
 class Solution {
 public:
-    string _1000ToRoman(int n) {
-        string s;
-        for (int i = 0; i < n; i++) {
-            s.append(1, 'M');
-        }
-        return s;
-    }
-    string _100ToRoman(int n) {
-        string s;
-        if (n < 4) s.append(n, 'C');
-        else if (n == 4) s.append("CD");
-        else if (n >= 5 && n < 9) {
-            s.append(1, 'D');
-            s.append(n - 5, 'C');
-        }
-        else s.append("CM");
-        return s;
-    }
-    string _10ToRoman(int n) {
-        string s;
-        if (n < 4) s.append(n, 'X');
-        else if (n == 4) s.append("XL");
-        else if (n >= 5 && n < 9) {
-            s.append(1, 'L');
-            s.append(n - 5, 'X');
-        }
-        else s.append("XC");
-        return s;
-    }
-    string _1ToRoman(int n) {
-        string s;
-        if (n < 4) s.append(n, 'I');
-        else if (n == 4) s.append("IV");
-        else if (n >= 5 && n < 9) {
-            s.append(1, 'V');
-            s.append(n - 5, 'I');
-        }
-        else s.append("IX");
-        return s;
-    }
     string intToRoman(int num) {
+        string Roman[4][10] = {
+            {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}, 
+            {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"}, 
+            {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"},
+            {"", "M", "MM", "MMM"}
+        };
         string str;
-        int n1 = num / 1000;
-        num %= 1000;
-        int n2 = num / 100;
-        num %= 100;
-        int n3 = num / 10;
-        num %= 10;
-        int n4 = num;
-        str.append(_1000ToRoman(n1));
-        str.append(_100ToRoman(n2));
-        str.append(_10ToRoman(n3));
-        str.append(_1ToRoman(n4));
+        int a[4] = {1, 10, 100, 1000};
+        for (int i = 3; i >= 0; i--) 
+            str += Roman[i][num / a[i] % 10];
         return str;
     }
 };
+
+int main() {
+    Solution s;
+    cout << s.intToRoman(1994) << endl;
+    return 0;
+}
