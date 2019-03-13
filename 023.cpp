@@ -21,56 +21,26 @@ struct ListNode {
 
 class Solution {
 public:
-    ListNode* merge2Lists(ListNode* a, ListNode* b) {
-        ListNode* pa = a;
-        ListNode* pb = b;
-        ListNode *ans;
-        if (!a && !b) return NULL;
-        else if (!a) return b;
-        else if (!b) return a;
-        if (pa->val <= pb->val) {
-            ans = new ListNode(pa->val);
-            pa = pa->next;
-        }
-        else {
-            ans = new ListNode(pb->val);
-            pb = pb->next;
-        }
-        ListNode *p = ans;
-        while (pa && pb) {
-            if (pa->val <= pb->val) {
-                p->next = new ListNode(pa->val);
-                p = p->next;
-                pa = pa->next;
-            }
-            else {
-                p->next = new ListNode(pb->val);
-                p = p->next;
-                pb = pb->next;
-            }
-        }
-        while (pa) {
-            p->next = new ListNode(pa->val);
-            p = p->next;
-            pa = pa->next;
-        }
-        while (pb) {
-            p->next = new ListNode(pb->val);
-            p = p->next;
-            pb = pb->next;
-        }
-        free(a);
-        free(b);
-        return ans;
-    }
     ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode* ans;
         int l = lists.size();
+        vector<int> v;
         if (l == 0) return NULL;
-        ListNode* ans = lists.back();
-        lists.pop_back();
-        while (!lists.empty()) {
-            ans = merge2Lists(ans, lists.back());
-            lists.pop_back();
+        for (int i = 0; i < l; i++) {
+            ListNode*p = lists[i];
+            while (p) {
+                v.push_back(p->val);
+                p = p->next;
+            }
+        }
+        sort(v.begin(), v.end());
+        int vl = v.size();
+        if (vl == 0) return NULL;
+        ans = new ListNode(v[0]);
+        ListNode* p = ans;
+        for (int i = 1; i < vl; i++) {
+            p->next = new ListNode(v[i]);
+            p = p->next;
         }
         return ans;
     }
