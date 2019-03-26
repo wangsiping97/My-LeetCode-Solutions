@@ -15,7 +15,6 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <set>
 using namespace std;
 
 class Solution {
@@ -24,32 +23,20 @@ public:
         vector< vector<string> > ans;
         int n = strs.size();
         if (n == 0) return ans;
-        vector<string> temps;
-        int j, k = 0;
+        map< vector<char>, vector<string> > m;
         for (int i = 0; i < n; i++) {
-            string temp = strs[i];
-            sort(temp.begin(), temp.end());
-            j = 0;
-            while (j < k && temp > ans[j].back()) {
-                j++;
+            int l = strs[i].length();
+            vector<char> v;
+            for (int j = 0; j < l; j++) {
+                v.push_back(strs[i][j]);
             }
-            if (temp == ans[j].back()) {
-                ans[j].pop_back();
-                ans[j].push_back(strs[i]);
-                ans[j].push_back(temp);
-                break;
-            }
-            if (j == k) {
-                vector<string> v;
-                v.push_back(strs[i]);
-                v.push_back(temp);
-                ans.push_back(v);
-                k++;
-            }
+            sort(v.begin(), v.end());
+            m[v].push_back(strs[i]);
         }
-        vector< vector<string> >::iterator iter;
-        for (iter = ans.begin(); iter != ans.end(); iter++) {
-            iter->pop_back();
+        map< vector<char>, vector<string> >::iterator iter = m.begin();
+        while (iter != m.end()) {
+            ans.push_back(iter->second);
+            iter++;
         }
         return ans;
     }
