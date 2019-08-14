@@ -10,7 +10,6 @@
 // Explanation: Intervals [1,4] and [4,5] are considered overlapping.
 
 #include <vector> 
-#include <queue>
 using namespace std;
 
 class Solution {
@@ -33,11 +32,16 @@ public:
         sort(head.begin(), head.end());
         sort(tail.begin(), tail.end());
         temp.push_back(head[0]);
-        head.erase(head.begin());
-        while (!head.empty() && head[0] <= tail[0]) {
-            head.erase(head.begin());
-            tail.erase(tail.begin());
+        for (int i = 0; i < l - 1; ++i) {
+            if (head[i + 1] > tail[i]) {
+                temp.push_back(tail[i]);
+                ans.push_back(temp);
+                temp.clear();
+                temp.push_back(head[i + 1]);
+            }
         }
-        temp.push_back(tail[0]);
+        temp.push_back(tail[l - 1]);
+        ans.push_back(temp);
+        return ans;
     }
 };
