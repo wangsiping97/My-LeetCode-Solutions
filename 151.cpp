@@ -12,8 +12,7 @@ public:
         string temp;
         while (getline(iss, temp, ' ')) {
             if (!temp.empty()) {
-                temp.append(1, ' ');
-                ans.insert(0, temp);
+                ans = temp + ' ' + ans;
             }
         }
         ans.pop_back();
