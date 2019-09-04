@@ -31,21 +31,20 @@ class Solution {
 public:
     vector< vector<int> > res;
     vector<int> ans;
-    int dfs(int i, int target, vector<int>& candidates) {
-        if (i >= candidates.size() + 1) return 0;
+    void dfs(int i, int target, vector<int>& candidates) {
+        if (i > candidates.size()) return;
         if (target == 0) {
             res.push_back(ans);
-            return 0;
+            return;
         }
         if (i < candidates.size()) {
             int t = target / candidates[i];
-            for (int j = t; j >= 0; j--) {
+            for (int j = 0; j <= t; j--) {
                 for (int k = 0; k < j; k++) ans.push_back(candidates[i]);
                 dfs(i + 1, target - j * candidates[i], candidates);
                 for (int k = 0; k < j; k++) ans.pop_back();
             }
         }
-        return 0;
     }
     vector< vector<int> > combinationSum(vector<int>& candidates, int target) {
         sort(candidates.begin(), candidates.end(), greater<int>());
