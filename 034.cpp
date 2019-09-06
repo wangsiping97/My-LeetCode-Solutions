@@ -10,7 +10,8 @@ using namespace std;
 class Solution {
 public:
     int binarySearch(vector<int>& nums, int target, int left, int right) {
-        if (left >= right && nums[right] != target) return -1;
+        if (left > right) return -1;
+        if (left == right && nums[left] != target) return -1;
         int med = (left + right) / 2;
         if (nums[med] < target) return binarySearch(nums, target, med + 1, right);
         if (nums[med] > target) return binarySearch(nums, target, left, med - 1);
