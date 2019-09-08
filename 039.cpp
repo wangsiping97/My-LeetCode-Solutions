@@ -24,7 +24,6 @@
 
 #include <iostream> 
 #include <vector>
-#define pb push_back
 using namespace std;
 
 class Solution {
@@ -39,7 +38,7 @@ public:
         }
         if (i < candidates.size()) {
             int t = target / candidates[i];
-            for (int j = 0; j <= t; j--) {
+            for (int j = 0; j <= t; j++) {
                 for (int k = 0; k < j; k++) ans.push_back(candidates[i]);
                 dfs(i + 1, target - j * candidates[i], candidates);
                 for (int k = 0; k < j; k++) ans.pop_back();
