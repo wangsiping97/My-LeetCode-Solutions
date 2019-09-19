@@ -11,7 +11,7 @@ public:
         int n = nums.size();
         if (n == 0) return;
         int a = 0, b = n - 1;
-        for (int i = a; a <= b && i <= b; i++) {
+        for (int i = a; i <= b; i++) {
             if (i >= 0 && nums[i] == 0) swap(nums[i], nums[a++]);
             if (i >= 0 && nums[i] == 2) swap(nums[i--], nums[b--]);
         }
