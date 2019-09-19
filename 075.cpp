@@ -12,8 +12,8 @@ public:
         if (n == 0) return;
         int a = 0, b = n - 1;
         for (int i = a; i <= b; i++) {
-            if (i >= 0 && nums[i] == 0) swap(nums[i], nums[a++]);
-            if (i >= 0 && nums[i] == 2) swap(nums[i--], nums[b--]);
+            if (nums[i] == 0) swap(nums[i], nums[a++]);
+            if (nums[i] == 2) swap(nums[i--], nums[b--]);
         }
     }
 };
