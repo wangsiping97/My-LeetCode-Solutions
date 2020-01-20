@@ -7,32 +7,31 @@
 
 #include <iostream> 
 #include <vector>
+#include <set>
 using namespace std;
 
 class Solution {
 public:
-    vector< vector<int> > res;
+    set< vector<int> > res;
     vector<int> tempans;
     void dfs(vector<int>& candidates, int target, int start) {
+        if (start > candidates.size() || target < 0) return;
         if (target == 0) {
-            res.push_back(tempans);
+            res.insert(tempans);
             return;
         }
-        if (start >= candidates.size()) return;
-        tempans.push_back(candidates[start]);
-        target -= candidates[start];
-        
-        for (int i = start + 1; i <= candidates.size(); ++i)
-            dfs(candidates, target, i);
-        tempans.pop_back();
-        target += candidates[start];
+        if (start < candidates.size()) {
+            tempans.push_back(candidates[start]);
+            dfs(candidates, target - candidates[start], start + 1);
+            tempans.pop_back();
+            dfs(candidates, target, start + 1);
+        }
     }
     vector< vector<int> > combinationSum2(vector<int>& candidates, int target) {
         sort(candidates.begin(), candidates.end(), greater<int>());
-        for (int i = 0; i < candidates.size(); ++i) 
-            dfs(candidates, target, i);
-        sort(res.begin(), res.end());
-        res.erase(unique(res.begin(), res.end()), res.end());
-        return res;
+        dfs(candidates, target, 0);
+        vector< vector<int> > vres;
+        vres.assign(res.begin(), res.end());
+        return vres;
     }
 };
