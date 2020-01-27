@@ -27,7 +27,7 @@ public:
             return head->next;
         }
         else {
-            v[target - 1]->next = v[target + 1];
+            v[target - 1]->next = n == 1 ? NULL: v[target + 1];
         }
         return head;
     }
