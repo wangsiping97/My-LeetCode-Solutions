@@ -17,6 +17,7 @@ class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
         vector<ListNode*> v;
+        v.reserve(n << 2);
         ListNode* iter = head;
         while (iter != NULL) {
             v.push_back(iter);
