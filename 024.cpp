@@ -2,7 +2,6 @@
 // You may not modify the values in the list's nodes, only nodes itself may be changed.
 
 #include <cstdio>
-#include <vector>
 using namespace std;
 
 struct ListNode {
@@ -22,9 +21,10 @@ public:
         j->next = k->next;
         k->next = j;
         head = k;
-        while (j->next != NULL) {
+        while (true) {
             i = j;
             j = j->next;
+            if (j == NULL) break;
             k = j->next;
             if (k == NULL) break;
             i->next = k;
