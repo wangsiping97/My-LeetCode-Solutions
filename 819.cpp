@@ -51,3 +51,9 @@ public:
         return ans;
     }
 };
+
+// Solution 
+// 1. Split the paragraph -- two pointers or istringstream
+// 2. Count the words out -- map<string, int>
+// 3. filter out the not banned words 
+// 4. Find out the maximum value and its key
