@@ -8,21 +8,20 @@
 
 #include <vector> 
 #include <string> 
-#include <map>
 using namespace std;
 
 class Solution {
 public:
     int findMinDifference(vector<string>& timePoints) {
-        map<int, int> minutes;
+        vector<int> minutes;
         int l = timePoints.size();
         for (int i = 0; i < l; ++i) {
-            minutes[(timePoints[i][0] * 10 + timePoints[i][i]) * 60 + timePoints[i][3] * 10 + timePoints[i][4]] = 1;
+            minutes.push_back(((timePoints[i][0]) * 10 + timePoints[i][1]) * 60 + (timePoints[i][3]) * 10 + timePoints[i][4]);
         }
-        int ans = 24 * 60 + minutes.begin()->first - minutes.end()->first;
-        map<int, int> :: iterator iter;
-        for (iter = minutes.begin(); iter != (minutes.end()--); iter++) {
-            ans = min(ans, iter++ ->first - iter->first);
+        sort(minutes.begin(), minutes.end());
+        int ans = 24 * 60 + minutes[0] - minutes[l - 1];
+        for (int i = 0; i < l - 1; ++i) {
+            ans = min(ans, minutes[i + 1] - minutes[i]);
         }
         return ans;
     }
