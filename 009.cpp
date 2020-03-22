@@ -14,26 +14,16 @@
 // Coud you solve it without converting the integer to a string?
 
 #include <iostream> 
-#include <vector>
+#include <string>
 using namespace std;
 
 class Solution {
 public:
     bool isPalindrome(int x) {
-        if (x < 0) return 0;
-        else {
-            vector<int> v1;
-            while (x) {
-                int pop = x % 10;
-                x /= 10;
-                v1.push_back(pop);
-            }
-            int i = 0;
-            while (i < v1.size() / 2 && v1[i] == v1[v1.size() - i - 1]) {
-                i++;
-            }
-            return i == v1.size() / 2;
-        }
+        string str = to_string(x);
+        string sstr = str;
+        reverse(str.begin(), str.end());
+        return sstr == str;
     }
 };
 
