@@ -12,7 +12,7 @@
 
 #include <vector> 
 #include <string> 
-#include <map>
+#include <unordered_map>
 #include <cstdlib>
 using namespace std; 
 
@@ -21,7 +21,7 @@ public:
     vector< vector<int> > palindromePairs(vector<string>& words) {
         vector< vector<int> > ans;
         ans.clear();
-        map<string, int> m;
+        unordered_map<string, int> m;
         int l = words.size();
         if (l == 0) return ans;
         for (int i = 0; i < l; ++i) {
@@ -34,7 +34,7 @@ public:
             int ll = words[i].length();
             int len;
             for (len = 0; len <= ll; ++len) {
-                map<string, int>::iterator iter = m.find(words[i].substr(0, len));
+                unordered_map<string, int>::iterator iter = m.find(words[i].substr(0, len));
                 if (iter == m.end() || i == iter->second) continue;
                 string res = words[i].substr(len);
                 int lres = res.length();
@@ -52,7 +52,7 @@ public:
                 }
             }
             for (len = 0; len <= ll; ++len) {
-                map<string, int>::iterator iter = m.find(words[i].substr(ll - len, len));
+                unordered_map<string, int>::iterator iter = m.find(words[i].substr(ll - len, len));
                 if (iter == m.end() || i == iter->second) continue;
                 string res = words[i].substr(0, ll - len);
                 int lres = res.length();
