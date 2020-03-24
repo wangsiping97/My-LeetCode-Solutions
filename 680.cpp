@@ -28,6 +28,11 @@ public:
         return true;
     }
     bool validPalindrome(string s) {
-        
+        int l = s.length();
+        for (int i = 0; i < l; ++i) {
+            if (s[i] != s[l - 1 - i])
+                return solve(s, i + 1, l - 1 - i) || solve(s, i, l - 2 - i);
+        }
+        return true;
     }
 };
