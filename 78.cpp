@@ -10,14 +10,15 @@ public:
     vector<int> tempans;
     void dfs(int index, vector<int>& nums) {
         int n = nums.size();
-        if (index >= n) {
-            ans.push_back(tempans);
+        if (index > n) {
             return;
         }
-        tempans.push_back(nums[index]);
-        dfs(index + 1, nums);
-        tempans.pop_back();
-        dfs(index + 1, nums);
+        for (int i = index; i < n; ++i) {
+            tempans.push_back(nums[i]);
+            dfs(i + 1, nums);
+            tempans.pop_back();
+        }
+        ans.push_back(tempans);
     }
     vector< vector<int> > subsets(vector<int>& nums) {
         dfs(0, nums);
