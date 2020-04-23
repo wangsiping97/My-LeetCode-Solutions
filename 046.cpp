@@ -19,12 +19,27 @@ using namespace std;
 
 class Solution {
 public:
+    vector< vector<int> > permutes;
+    vector<int> temp;
+    vector<bool> isUsed;
+    void dfs(vector<int>& nums, int n) {
+        if (temp.size() == n) permutes.push_back(temp);
+        if (temp.size() > n) return;
+        for (int i = 0; i < n; ++i) {
+            if (isUsed[i] == false) {
+                isUsed[i] = true;
+                temp.push_back(nums[i]);
+                dfs(nums, n);
+                temp.pop_back();
+                isUsed[i] = false;
+            }
+        }
+    }
     vector< vector<int> > permute(vector<int>& nums) {
-        vector< vector<int> > res;
-        sort(nums.begin(), nums.end());
-        do {
-            res.push_back(nums);
-        } while(next_permutation(nums.begin(), nums.end()));
-        return res;
+        int n = nums.size();
+        for (int i = 0; i < n; ++i)
+            isUsed.push_back(false);
+        dfs(nums, n);
+        return permutes;
     }
 };
