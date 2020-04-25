@@ -7,27 +7,25 @@ using namespace std;
 
 class Solution {
 public:
-    int ans; 
     int* searched;
     void dfs(int i, vector< vector<int> >& M, int n) {
         searched[i] = 1;
-        bool flag = false;
-        for (int j = i + 1; j < n; ++j) {
-            if (searched[j] == 0 && M[i][j] == 1) {
-                flag = true;
+        for (int j = 0; j < n; ++j) {
+            if (searched[j] == 0 && M[i][j] == 1) 
                 dfs(j, M, n);
-            }
         }
-        if (flag == false) ans++;
     }
     int findCircleNum(vector< vector<int> >& M) {
-        ans = 0;
+        int ans = 0;
         int n = M.size();
         if (n == 0) return 0; 
         searched = (int*)malloc(n * sizeof(int));
         memset(searched, 0, n * 4);
         for (int i = 0; i < n; ++i) {
-            if (searched[i] == 0) dfs(i, M, n);
+            if (searched[i] == 0) {
+                ans++;
+                dfs(i, M, n);
+            }
         }
         return ans;
     }
