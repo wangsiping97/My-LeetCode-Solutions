@@ -8,52 +8,32 @@ using namespace std;
 
 class Solution {
 public:
-    vector<string> f(int i, string digits) {
-        vector<string> ans;
-        char bucket[8][4] = {{'a', 'b', 'c', '0'},
-                            {'d', 'e', 'f', '0'}, 
-                            {'g', 'h', 'i', '0'}, 
-                            {'j', 'k', 'l', '0'}, 
-                            {'m', 'n', 'o', '0'}, 
-                            {'p', 'q', 'r', 's'}, 
-                            {'t', 'u', 'v', '0'}, 
-                            {'w', 'x', 'y', 'z'}};
-        if (i == 0) {
-            string str;
-            str.reserve(1);
-            for (int j = 0; j < 4; j++) {
-                if (bucket[digits[i] - '0' - 2][j] != '0') {
-                    str.append(1, bucket[digits[0] - '0' - 2][j]);
-                    ans.push_back(str);
-                    str.clear();
-                }
-            }
-            return ans;
+    vector<string> ans;
+    string temp;
+    void dfs(int index, vector<string>& bucket, string digits, int l) {
+        if (index == l) {
+            ans.push_back(temp);
+            return;
         }
-        else {
-            string str;
-            str.reserve(i + 1);
-            vector<string>::iterator iter;
-            vector<string> prev = f(i - 1, digits);
-            for (iter = prev.begin(); iter != prev.end(); iter++) {
-                for (int j = 0; j < 4; j++) {
-                    if (bucket[digits[i] - '0' - 2][j] != '0') {
-                        str.append(*iter);
-                        str.append(1, bucket[digits[i] - '0' - 2][j]);
-                        ans.push_back(str);
-                        str.clear();
-                    }
-                }
-            }
-            return ans;
+        for (int i = 0; i < bucket[digits[index] - '0' - 2].length(); ++i) {
+            temp = temp + bucket[digits[index] - '0' - 2][i];
+            dfs(index + 1, bucket, digits, l);
+            temp.pop_back();
         }
     }
     vector<string> letterCombinations(string digits) {
+        vector<string> bucket;
+        bucket.push_back("abc");
+        bucket.push_back("def");
+        bucket.push_back("ghi");
+        bucket.push_back("jkl");
+        bucket.push_back("mno");
+        bucket.push_back("pqrs");
+        bucket.push_back("tuv");
+        bucket.push_back("wxyz");
         int l = digits.length();
-        if (l == 0) {
-            vector<string> ans;
-            return ans;
-        }
-        return f(l - 1, digits);
+        if (l == 0) return ans;
+        dfs(0, bucket, digits, l);
+        return ans;
     }
 };
