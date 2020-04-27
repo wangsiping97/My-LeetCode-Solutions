@@ -13,15 +13,24 @@ class Solution {
 public:
     vector< vector<string> > ans;
     bool* checked;
-    void dfs(int index, vector< vector<string> >& accounts, unordered_map<string, vector<int> >& map, vector<string>& temp) {
+    uint32_t time33(string str)
+    {
+        unsigned long  hash = 0;
+        int len = str.length();
+        for (int i = 0; i < len; i++) {
+            hash = hash *33 + (unsigned long) str[i];
+        }
+        return hash;
+    }
+    void dfs(int index, vector< vector<string> >& accounts, unordered_map<uint32_t, vector<int> >& map, vector<string>& temp) {
         checked[index] = true; 
         int m = accounts[index].size();
         for (int i = 1; i < m; ++i) {
-            vector<int> v = map[accounts[index][i]];
+            vector<int> v = map[time33(accounts[index][i])];
             int sz = v.size();
             if (sz > 0) {
                 temp.push_back(accounts[index][i]);
-                map[accounts[index][i]].clear();
+                map[time33(accounts[index][i])].clear();
                 for (int j = 0; j < sz; ++j) {
                     if (checked[v[j]] == false)
                         dfs(v[j], accounts, map, temp);
@@ -31,10 +40,10 @@ public:
     }
     vector< vector<string> > accountsMerge(vector< vector<string> >& accounts) {
         int n = accounts.size();
-        unordered_map<string, vector<int> > map;
+        unordered_map<uint32_t, vector<int> > map;
         for (int i = 0; i < n; ++i) {
             for (int j = 1; j < accounts[i].size(); ++j) 
-                map[accounts[i][j]].push_back(i); // name index
+                map[time33(accounts[i][j])].push_back(i); // name index
         }
         checked = (bool*) malloc(n * sizeof(bool));
         memset(checked, false, n * sizeof(bool));
