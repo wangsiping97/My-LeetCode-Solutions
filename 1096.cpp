@@ -21,22 +21,70 @@
 #include <vector> 
 #include <stack> 
 #include <set> 
+#include <iostream> 
 using namespace std; 
 
 class Solution {
 public:
-    string compute(string str) {
-        stack<char> s;
-        
+    vector<string> compute(vector<string>& x, vector<string>& y) {
+        set<string> set;
+        for (int i = 0; i < x.size(); ++i) 
+            for (int j = 0; j < y.size(); ++j) 
+                set.insert(x[i] + y[j]);
+        vector<string> res;
+        res.assign(set.begin(), set.end());
+        return res;
     }
     vector<string> braceExpansionII(string expression) {
-        stack<char> s;
-        int l = expression.length();
+        cout << expression << endl;
+        vector<string> ans;
+        int l = expression.length(); 
+        stack< vector<string> > st;
+        vector<string> v;
         for (int i = 0; i < l; ++i) {
-            if (expression[i] == '{') {
-                s.push('{');
+            if (expression[i] >= 'a' && expression[i] <= 'z') {
+                string str = "";
+                str = str + expression[i];
+                v.push_back(str);
+                if (i > 0 && expression[i - 1] != ',') {
+                    v = compute(st.top(), v);
+                    st.pop();
+                }
+                st.push(v);
+                v.clear();
             }
-
+            else if (expression[i] == '{') {
+                int count = 0, j = i;
+                for (; j < l; ++j) {
+                    if (expression[j] == '{') count++;
+                    if (expression[j] == '}') count--;
+                    if (count == 0) break;
+                }
+                v = braceExpansionII(expression.substr(i + 1, j - i - 1));
+                if (i > 0 && expression[i - 1] != ',' && expression[i - 1] != '{') {
+                    v = compute(st.top(), v);
+                    st.pop();
+                }
+                st.push(v);
+                v.clear();
+                i = j;
+            }
         }
+        set<string> set;
+        while (!st.empty()) {
+            for (int i = 0; i < st.top().size(); ++i) 
+                set.insert(st.top()[i]);
+            st.pop();
+        }
+        ans.assign(set.begin(), set.end());
+        return ans;
     }
 };
+
+int main() {
+    Solution s;
+    vector<string> ans = s.braceExpansionII("{{a,z},a{b,c},{ab,z}}");
+    for (int i = 0; i < ans.size(); ++i)
+        cout << ans[i] << " ";
+    cout << endl;
+}
