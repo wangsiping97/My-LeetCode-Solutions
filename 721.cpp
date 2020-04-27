@@ -13,8 +13,7 @@ class Solution {
 public:
     vector< vector<string> > ans;
     bool* checked;
-    uint32_t time33(string str)
-    {
+    uint32_t time33(string str) {
         unsigned long  hash = 0;
         int len = str.length();
         for (int i = 0; i < len; i++) {
