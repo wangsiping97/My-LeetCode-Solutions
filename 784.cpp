@@ -20,6 +20,7 @@ public:
             temp[index] = str[index] + 'A' - 'a'; // lower-case to upper-case
             dfs(str, index+1, isLetter);
         }
+        else dfs(str, index + 1, isLetter);
     }
     vector<string> letterCasePermutation(string S) {
         int l = S.length();
