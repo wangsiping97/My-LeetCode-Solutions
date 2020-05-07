@@ -22,24 +22,10 @@ struct TreeNode {
 
 class Solution {
 public:
-    int tempans; 
-    int ans; 
-    void dfs(TreeNode* t) {
-        if (t == NULL) {
-            ans = max(ans, tempans);
-            tempans = 0;
-            return;
-        }
-        tempans++;
-        int temp = tempans;
-        dfs(t->left);
-        tempans = temp;
-        dfs(t->right);
-    }
     int maxDepth(TreeNode* root) {
-        tempans = 0;
-        ans = 0;
-        dfs(root);
-        return ans; 
+        if (root == NULL) return 0; 
+        int depth_left = maxDepth(root->left);
+        int depth_right = maxDepth(root->right);
+        return max(depth_left, depth_right) + 1;
     }
 };
