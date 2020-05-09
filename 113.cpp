@@ -34,7 +34,7 @@ public:
         }
         if (node->right != NULL) {
             temp.push_back(node->right->val);
-            dfs(node->right, sum = node->right->val);
+            dfs(node->right, sum - node->right->val);
             temp.pop_back();
         }
     }
