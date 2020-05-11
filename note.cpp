@@ -34,3 +34,30 @@ uint32_t time33(string str) {
     }
     return hash;
 }
+
+// 6. tree
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+// 6.1 return the depth of a tree
+int max_depth(TreeNode* root) {
+    if (root == NULL) return 0; 
+    int left_depth = max_depth(root->left);
+    int right_depth = max_depth(root->right);
+    return max(left_depth, right_depth) + 1;
+}
+
+// 6.2 in-order traversal
+// (1) recursive
+// (2) iterative -- stack
+// (3) iterative -- morris
+
+// 6.3 pre-order traversal
+
+// 6.4 post-order traversal
