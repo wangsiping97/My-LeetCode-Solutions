@@ -1,3 +1,5 @@
+// Sort a linked list in O(n log n) time using constant space complexity.
+
 #include <iostream> 
 using namespace std; 
 
@@ -14,7 +16,7 @@ struct ListNode {
 
 class Solution {
 public:
-    ListNode* mergeSortList(ListNode* head) {
+    ListNode* sortList(ListNode* head) {
         if (head == NULL || head->next == NULL) return head;
         ListNode *pfast = head->next, *pslow = head;
         while (pfast != NULL && pfast->next != NULL) {
@@ -23,23 +25,21 @@ public:
         }
         ListNode* newHead = pslow->next;
         pslow->next = NULL;
-        return merge(mergeSortList(head), mergeSortList(newHead));
+        return merge(sortList(head), sortList(newHead));
     }
     ListNode* merge(ListNode* list1, ListNode* list2) {
         ListNode *p1 = list1, *p2 = list2;
         ListNode* head = new ListNode();
         ListNode* node = head;
         while (p1 && p2) {
-            ListNode* temp = new ListNode();
             if (p1->val < p2->val) {
-                temp->val = p1->val;
+                node->next = p1;
                 p1 = p1->next;
             }
             else {
-                temp->val = p2->val; 
+                node->next = p2;
                 p2 = p2->next;
             }
-            node->next = temp;
             node = node->next;
         }
         if (p1) node->next = p1;
