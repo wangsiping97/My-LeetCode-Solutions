@@ -16,38 +16,30 @@ struct ListNode {
 
 class Solution {
 public:
-    ListNode* mergeSortList(ListNode* head) {
-        if (head == NULL || head->next == NULL) return head;
-        ListNode *pfast = head, *pslow = head;
-        ListNode *temp = head;
-        while (pfast != NULL && pfast->next != NULL) {
-            pfast = pfast->next->next; 
-            temp = pslow;
-            pslow = pslow->next;
-        }
-        ListNode* newHead = pslow;
-        temp->next = NULL;
-        return merge(mergeSortList(head), mergeSortList(newHead));
-    }
-    ListNode* merge(ListNode* list1, ListNode* list2) {
-        ListNode *p1 = list1, *p2 = list2;
-        ListNode* head = new ListNode();
-        ListNode* node = head;
-        while (p1 && p2) {
-            ListNode* temp = new ListNode();
-            if (p1->val < p2->val) {
-                temp->val = p1->val;
-                p1 = p1->next;
+    ListNode* insertionSortList(ListNode* head) {
+        if (!head || !head->next) return head;
+        ListNode* p = head->next; 
+        ListNode* parent = head;
+        while (p) {
+            if (head->val > p->val) {
+                parent->next = p->next;
+                p->next = head;
+                head = p;
+                p = parent->next; 
+                continue;
             }
-            else {
-                temp->val = p2->val; 
-                p2 = p2->next;
+            ListNode* q = head; 
+            while (q != p && q->next->val <= p->val) q = q->next;
+            if (q == p) {
+                parent = p;
+                p = p->next;
+                continue;
             }
-            node->next = temp;
-            node = node->next;
+            parent->next = p->next;
+            p->next = q->next;
+            q->next = p;
+            p = parent->next;
         }
-        if (p1) node->next = p1;
-        if (p2) node->next = p2;
-        return head->next; 
+        return head;
     }
 };
