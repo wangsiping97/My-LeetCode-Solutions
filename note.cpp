@@ -18,6 +18,19 @@ vector<string> splitString(const string str, const char flag) {
 // 2. two pointers
 
 // 3. binary search
+// 3.1 find peak in bitonic array
+int findPeak(vector<int>& nums) {
+    int left = 0, right = nums.size() - 1; 
+    while (left < right - 1) { // attention
+        int mid = left + (right - left) / 2;
+        if (nums[mid - 1] < nums[mid] && nums[mid] > nums[mid + 1]) return mid;
+        else if (nums[mid - 1] < nums[mid]) {
+            left = mid;
+        }
+        else right = mid; 
+    }
+    return nums[left] > nums[right] ? left : right;
+}
 
 // 4. vector 去重
 void f(vector<int>& v) {
