@@ -22,48 +22,22 @@ struct TreeNode {
 
 class Solution {
 public:
-    TreeNode* parent;
     TreeNode* deleteNode(TreeNode* root, int key) {
-        if (root->val == key) {
-            if (root->right == NULL) return root->left; 
-            if (root->left == NULL) return root->right; 
-            TreeNode* t = root->right; 
-            while (t->left) t = t->left; 
-            t->left = root->left;
-            return root->right; 
-        }
-        parent = root;
-        TreeNode* node = search(root, key); 
-        if (node == NULL) return root;
-        if (parent->right == node) {
-            if (node->right == NULL) {
-                parent->right = node->left;
-                return root; 
+        if (!root) return NULL;
+        if (root->val > key) {
+            root->left = deleteNode(root->left, key);
+        } else if (root->val < key) {
+            root->right = deleteNode(root->right, key);
+        } else {
+            if (!root->left || !root->right) {
+                root = (root->left) ? root->left : root->right;
+            } else {
+                TreeNode *cur = root->right;
+                while (cur->left) cur = cur->left;
+                root->val = cur->val;
+                root->right = deleteNode(root->right, cur->val);
             }
-            parent->right = node->right; 
-            TreeNode* t = node->right; 
-            while (t->left) t = t->left; 
-            t->left = node->left; 
-            return root; 
         }
-        else {
-            if (node->right == NULL) {
-                parent->left = node->left;
-                return root;
-            }
-            parent->left = node->right;
-            TreeNode* t = node->right; 
-            while (t->left) t = t->left; 
-            t->left = node->left; 
-            return root;
-        }
-    }
-    
-    TreeNode* search(TreeNode* root, int key) {
-        if (root == NULL) return NULL; 
-        if (root->val == key) return root; 
-        parent = root;
-        if (root->val > key) return search(root->left, key);
-        else return search(root->right, key);
+        return root;
     }
 };
