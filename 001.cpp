@@ -10,37 +10,28 @@
 
 #include <iostream> 
 #include <vector>
+#include <unordered_map> 
 using namespace std;
 
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
         vector<int> ans;
-        for (int i = 0; i < nums.size(); i++) {
-            for (int j = 0; j < nums.size(); j++) {
-                if (i < j && nums[i] + nums[j] == target) {
-                    ans.push_back(i);
-                    ans.push_back(j);
-                    break;
-                }
+        unordered_map<int, vector<int> > map;
+        for (int i = 0; i < nums.size(); ++i) {
+            map[nums[i]].push_back(i);
+            unordered_map<int, vector<int > >::iterator iter = map.find(target - nums[i]);
+            if (iter != map.end()) {
+                if (iter->second.size() == 2) return iter->second;
+                if (iter->second[0] == i) continue;
+                ans.push_back(iter->second[0]);
+                ans.push_back(i);
+                return ans;
             }
         }
         return ans;
     }
 };
 
-int main() {
-    Solution s;
-    int a[4] = {2, 7, 11, 15};
-    vector<int> nums(a, a + 4);
-
-    int target = 9;
-
-    vector<int> ans = s.twoSum(nums, target);
-
-    for (int i = 0; i < ans.size(); i++) {
-        cout << ans[i] << " ";
-    }
-    
-    return 0;
-}
+// Solution
+// hash table
