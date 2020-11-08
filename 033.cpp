@@ -19,23 +19,18 @@ using namespace std;
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-        int l = nums.size();
-        if (l == 0) return -1;
-        int mid, start = 0, end = l - 1;
-        while (start < end) {
-            mid = (start + end) / 2;
-            if (nums[mid] > nums[start]) start = mid;
-            else if (nums[mid] < nums[start]) end = mid - 1; 
-            else start = mid + 1;
-        }
-        if (target > nums[0]) end = start, start = 0;
-        else if (target < nums[0]) end = l - 1;
-        else return 0;
-        while (start <= end) {
-            mid = (start + end) / 2;
-            if (nums[mid] < target) start = mid + 1;
-            else if (nums[mid] > target) end = mid - 1;
-            else return mid;
+        int left = 0, right = nums.size() - 1, ans;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] >= nums[left]) {
+                if (target >= nums[left] && target < nums[mid]) right = mid - 1;
+                else if (target == nums[mid]) return mid;
+                else left = mid + 1;
+            } else {
+                if (target <= nums[right] && target > nums[mid]) left = mid + 1;
+                else if (target == nums[mid]) return mid;
+                else right = mid - 1;
+            }
         }
         return -1;
     }
