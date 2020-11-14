@@ -67,3 +67,6 @@ public:
         return ans;
     }
 };
+
+// Solution
+// Notice: this bfs should be do for each `initial` (cannot add all initials into the queue at first)
