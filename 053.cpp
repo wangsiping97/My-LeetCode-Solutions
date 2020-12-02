@@ -12,22 +12,21 @@ using namespace std;
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        int max = 0, iter = 0, l = nums.size();
-        int temp = 0;
-        for (int i = 0; i < l; i++) {
-            temp += nums[i];
-            if (temp > max) {
-                max = temp;
-                iter++;
-            }
-            else if (temp < 0) {
-                temp = 0;
-            }
+        int n = nums.size();
+        if (n == 0) return 0;
+        int dp[n];
+        memset(dp, 0, n * sizeof(int));
+        dp[0] = nums[0];
+        int ans = nums[0];
+        for (int i = 1; i < n; ++i) {
+            dp[i] = max(nums[i] + dp[i - 1], nums[i]);
+            if (dp[i] > ans) ans = dp[i];
         }
-        if (iter == 0) {
-            sort(nums.begin(), nums.end());
-            return nums[l - 1];
-        }
-        return max;
+        return ans;
     }
 };
+
+// Solution
+// dp[i] := the max sum of subarray ending with nums[i]
+// dp[i] = max(nums[i] + dp[i - 1], nums[i])
+// ans = max{dp[i]}
