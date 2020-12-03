@@ -18,34 +18,29 @@ using namespace std;
 
 class Solution {
 public:
-    vector<int> tempsol;
-    int ans;
-    void dfs(int index, vector<int>& coins, int amount) {
-        int n = coins.size();
-        if (tempsol.size() >= ans || index > n) return; 
-        if (amount == 0) {
-            ans = ans < tempsol.size() ? ans : tempsol.size();
-            return;
-        }
-        for (int _ = index; _ < n; ++_) {
-            int t = amount / coins[_];
-            if (amount % coins[_] == 0) {
-                ans = ans < tempsol.size() + t ? ans : tempsol.size() + t;
-                return;
-            }
-            if (tempsol.size() + t >= ans) return;
-            for (int i = t; i > 0; --i) {
-                for (int j = 0; j < i; ++j) tempsol.push_back(coins[_]);
-                dfs(_ + 1, coins, amount - i * coins[_]);
-                for (int j = 0; j < i; ++j) tempsol.pop_back();
-            }
-        }
-    }
     int coinChange(vector<int>& coins, int amount) {
-        ans = amount + 1;
         sort(coins.begin(), coins.end(), greater<int>());
-        dfs(0, coins, amount);
-        if (ans == amount + 1) return -1;
-        return ans;
+        int n = coins.size();
+        if (n == 0) return -1;
+        if (amount == 0) return 0;
+        long long max = amount / coins[n - 1];
+        long long dp[n][amount + 1];
+        for (long long i = 0; i < n; ++i) {
+            for (long long j = 0; j <= amount; ++j) dp[i][j] = max + 1;
+            if (coins[i] <= amount)
+                dp[i][coins[i]] = 1;
+        }
+        for (long long i = 0; i < n; ++i) {
+            for (long long j = (long long)coins[i] + 1; j <= amount; ++j) {
+                if (i == 0) dp[i][j] = dp[i][j - coins[i]] + 1;
+                else dp[i][j] = min(dp[i][j - coins[i]] + 1, dp[i - 1][j]);
+            }
+        }
+        if (dp[n - 1][amount] > max) return -1;
+        return dp[n - 1][amount];
     }
 };
+
+// Solution
+// dp[i][j] := the smallest number of coins before coins[i] with amount = j
+// dp[i][j] = min{dp[i][j - coins[i]] + 1, dp[i - 1][j]}
