@@ -10,20 +10,28 @@ using namespace std;
 class Solution {
 public:
     bool canPartition(vector<int>& nums) {
-        int sum = 0;
         int n = nums.size();
-        for (int i = 0; i < n; ++i) sum += nums[i];
-        if (sum % 2 == 1) return false; 
-        sum /= 2;
-        bool dp[n][sum + 1];
-        for (int i = 0; i < n; ++i) {
-            if (nums[i] > sum) return false;
-            for (int j = 0; j <= sum; ++j) {
-                if (i == 0) dp[i][j] = nums[i] == j ? true : false;
-                else if (j < nums[i]) dp[i][j] = dp[i - 1][j];
-                else dp[i][j] = dp[i - 1][j - nums[i]] || dp[i - 1][j];
+        if (n == 0) return true;
+        int sum = 0;
+        for (int val : nums) sum += val; 
+        if (sum % 2 == 1) return false;
+        bool dp[sum + 1];
+        memset(dp, false, (sum + 1) * sizeof(bool));
+        dp[0] = true;
+        dp[nums[0]] = true;
+        for (int i = 1; i < n; ++i) {
+            for (int j = sum / 2; j >= nums[i]; --j) {
+                dp[j] = dp[j] | dp[j - nums[i]];
+                if (j == sum / 2 && dp[sum / 2] == true) return true;
             }
         }
-        return dp[n - 1][sum];
+        return false;
     }
 };
+
+// Solution
+// dp[i][j] := having considered first i elements in nums, with an amount of j
+// dp[i][j] := 0 if j cannot be reached, 1 otherwise
+// dp[i][j] = dp[i - 1][j - nums[i]] | dp[i - 1][j]
+// ans = dp[nums.size() - 1][sum / 2]
+// trick: scan j from large to small
