@@ -9,50 +9,49 @@ using namespace std;
 class Solution {
 public:
     int calculate(string s) {
-        int num = 0; // current number
-        int curres = 0; // current result
-        int ans = 0; // final result
-        int count = 0; 
-        char c;
-        char op = '+';
+        long long ans = 0;
+        long long cur = 0;
+        long long top = 0;
         int l = s.length();
+        char op = '+';
         for (int i = 0; i < l; ++i) {
-            c = s[i];
-            if (c >= '0' && c <= '9') {
-                // deal with integer overflow
-                if (num == 214748364 && c == '8') {
-                    num = -num;
-                    op = '+';
-                }
-                num = num >= 0 ? num * 10 - '0' + c : num * 10 + '0' - c;
+            if (s[i] >= '0' && s[i] <= '9') {
+                cur *= 10;
+                cur += s[i] - '0';
             }
-            else if (c == '(') {
-                count++;
-                for (int j = i + 1; j < l; ++j) {
-                    if (s[j] == '(') count++;
-                    else if (s[j] == ')') count--;
-                    if (count == 0) {
-                        num = calculate(s.substr(i + 1, j - i -1));
-                        i = j;
-                        break;
-                    }
-                }
-            }
-            if (c == '+' || c == '-' || c == '*' || c == '/' || i == l - 1) {
+            if (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/' || i == l - 1) {
                 switch(op) {
-                    case '+': curres += num; break;
-                    case '-': curres -= num; break;
-                    case '*': curres *= num; break;
-                    case '/': curres /= num; break;
+                    case '+': top += cur; break;
+                    case '-': top -= cur; break;
+                    case '*': top *= cur; break;
+                    case '/': top /= cur; break;
+                    default: break;
                 }
-                if (c == '+' || c == '-' || i == l - 1) {
-                    ans += curres;
-                    curres = 0;
+                if (s[i] == '+' || s[i] == '-' || i == l - 1) {
+                    ans += top;
+                    top = 0;
                 }
-                op = c;
-                num = 0;
+                op = s[i];
+                cur = 0;
+            }
+            if (s[i] == '(') {
+                int j = i + 1;
+                int count = 1;
+                while (j < l && count > 0) {
+                    if (s[j] == '(') count++;
+                    if (s[j] == ')') count--;
+                    j++;
+                }
+                cur = calculate(s.substr(i + 1, j - i - 2));
+                i = j - 2; 
             }
         }
         return ans;
     }
 };
+
+// Solution
+// for (...) -> backtracking
+// without parentheses: * /
+// stack
+// followup: using O(1) space: only keep the top of the stack
