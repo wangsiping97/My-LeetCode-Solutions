@@ -21,13 +21,10 @@ public:
         memset(dp, 0, sizeof(dp));
         for (int dif = 0; dif < sz; ++dif) {
             for (int i = 0; i + dif < sz; ++i) {
-                dp[i][i + dif] = INT_MAX;
-                bool flag = false;
+                dp[i][i + dif] = (dif > 1) ? INT_MAX : 0;
                 for (int k = i + 1; k < i + dif; ++k) {
-                    flag = true;
                     dp[i][i + dif] = min(dp[i][i + dif], cuts[i + dif] - cuts[i] + dp[i][k] + dp[k][i + dif]);
                 }
-                if (!flag) dp[i][i + dif] = 0;
             }
         }
         return dp[0][sz - 1];
