@@ -10,49 +10,46 @@
 using namespace std; 
 
 class Solution {
-private:
+public:
     bool row[9][9];
     bool col[9][9];
-    bool block[9][9];
-    bool valid;
-    vector< pair<int, int> > spaces;
-
-public:
-    void dfs(vector< vector<char> >& board, int pos) {
-        if (pos == spaces.size()) {
-            valid = true;
-            return;
-        }
-
-        int i = spaces[pos].first;
-        int j = spaces[pos].second;
-        for (int val = 1; val <= 9 && !valid; ++val) {
-            if (row[i][val - 1] == 0 && col[val - 1][j] == 0 && block[i / 3 * 3 + j / 3][val - 1] == 0) {
-                board[i][j] = val + '0';
-                row[i][val - 1] = col[val - 1][j] = block[i / 3 * 3 + j / 3][val - 1] = 1;
-                dfs(board, pos + 1);
-                row[i][val - 1] = col[val - 1][j] = block[i / 3 * 3 + j / 3][val - 1] = 0;
-            }
-        }
-    }
-
+    bool block[3][3][9];
+    vector< vector<char> > ans;
+    vector< pair<int, int> > spaces; // important
     void solveSudoku(vector< vector<char> >& board) {
-        memset(row, false, sizeof(row));
-        memset(col, false, sizeof(col));
-        memset(block, false, sizeof(block));
-        valid = false;
-
+        memset(row, 0, sizeof(row));
+        memset(col, 0, sizeof(col));
+        memset(block, 0, sizeof(block));
+        ans = board;
         for (int i = 0; i < 9; ++i) {
             for (int j = 0; j < 9; ++j) {
-                if (board[i][j] == '.') {
+                if (board[i][j] != '.') {
+                    row[i][board[i][j] - '1'] = true;
+                    col[j][board[i][j] - '1'] = true;
+                    int bi = i / 3, bj = j / 3;
+                    block[bi][bj][board[i][j] - '1'] = true;
+                } else {
                     spaces.push_back(pair<int, int>(i, j));
-                }
-                else {
-                    row[i][board[i][j] - '1'] = col[board[i][j] - '1'][j] = block[i / 3 * 3 + j / 3][board[i][j] - '1'] = true;
                 }
             }
         }
-
         dfs(board, 0);
+        board = ans;
+    }
+
+    void dfs(vector< vector<char> >& board, int pos) {
+        if (pos == spaces.size()) {
+            ans = board;
+            return;
+        }
+        int i = spaces[pos].first, j = spaces[pos].second;
+        for (int k = 0; k < 9; ++k) {
+            if (!row[i][k] && !col[j][k] && !block[i / 3][j / 3][k]) {
+                board[i][j] = k + '1';
+                row[i][k] = col[j][k] = block[i / 3][j / 3][k] = true;
+                dfs(board, pos + 1);
+                row[i][k] = col[j][k] = block[i / 3][j / 3][k] = false;
+            }
+        }
     }
 };
