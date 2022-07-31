@@ -14,9 +14,7 @@
 #include <vector> 
 #include <cmath>
 
-
 using namespace std;
-
 
 class Solution {
 public:
@@ -91,7 +89,6 @@ public:
         vector<int> row_maxes(m);
         vector<int> col_maxes(n);
         unordered_map<int, int> rank_map;
-        int rank = 0;
         
 
         for (int r = 0, l = 0; r < n * m; l = r) {
