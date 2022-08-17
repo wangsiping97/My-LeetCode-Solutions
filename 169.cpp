@@ -8,15 +8,23 @@ using namespace std;
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-        map<int, int> m;
-        int l = nums.size();
-        for (int i = 0; i < l; ++i) {
-            m[nums[i]]++;
-            if (m[nums[i]] > l / 2) return nums[i];
+        int n = nums.size();
+        int ans = nums[0];
+        int counter = 1;
+        for (int i = 1; i < n; ++i) {
+            if (counter > 0 && nums[i] != ans) {
+                counter--;
+                if (counter == 0) {
+                    ans = nums[i];
+                    counter = 1;
+                }
+            } else if (nums[i] == ans) {
+                counter++;
+            }
         }
-        return -1;
+        return ans;
     }
 };
 
 // Solution
-// (Hash) map
+// voting method
