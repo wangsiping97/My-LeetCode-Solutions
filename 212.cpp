@@ -11,79 +11,95 @@ public:
     bool isLeaf;
     bool isOut;
     string word;
-    unordered_map<char, TrieNode*> next;
-    TrieNode () {
+    unordered_map<char, TrieNode*> children;
+    TrieNode() {
         isLeaf = false;
         isOut = false;
     }
-}; 
+};
 
 class Trie {
 private: 
-    TrieNode* root; 
+    TrieNode* root;
 public: 
     Trie() {
         root = new TrieNode();
     }
     void insert(string word) {
-        TrieNode* cur = root; 
+        TrieNode* p = root;
         for (char c : word) {
-            if (cur->next.count(c) == 0) {
-                cur->next[c] = new TrieNode();
-                cur->next[c]->word = cur->word + c;
+            if (p->children.find(c) == p->children.end()) {
+                p->children[c] = new TrieNode();
+                p = p->children[c];
+            } else {
+                p = p->children[c];
             }
-            cur = cur->next[c];
         }
-        cur->isLeaf = true;
+        p->word = word;
+        p->isLeaf = true;
     }
     TrieNode* getRoot() {
         return root;
     }
-}; 
+};
 
 class Solution {
 public:
-    vector<string> ans; 
-    vector< vector<char> > visited;
-    vector<string> findWords(vector< vector<char> >& board, vector<string>& words) {
-        visited = board;
+    vector<string> ans;
+    vector<vector<char>> visited;
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
         Trie trie = Trie();
-        TrieNode* root = trie.getRoot();
-        for (string word : words) trie.insert(word);
+        for (string word : words) {
+            trie.insert(word);
+        }
         int m = board.size();
-        if (m == 0) return ans;
         int n = board[0].size();
-        if (n == 0) return ans; 
+        visited = board;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j)
+                visited[i][j] = '-';
+        }
+        // start search
+        TrieNode* root = trie.getRoot();
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                if (root->next.count(board[i][j]) > 0) {
-                    visited[i][j] = '-';
-                    dfs(board, root->next[board[i][j]], i, j);
+                if (root->children.find(board[i][j]) != root->children.end()) {
                     visited[i][j] = '+';
+                    dfs(board, root->children[board[i][j]], i, j);
+                    visited[i][j] = '-';
                 }
             }
         }
         return ans;
     }
-    void dfs(vector< vector<char> >& board, TrieNode* node, int i, int j) {
-        if (!node) return;
-        if (node->isLeaf && !node->isOut) {
-            ans.push_back(node->word);
-            node->isOut = true;
-        }
-        for (int ii = i - 1; ii <= i + 1; ii += 2) {
-            if (ii >= 0 && ii < board.size() && node->next.count(board[ii][j]) > 0 && visited[ii][j] != '-') {
-                visited[ii][j] = '-';
-                dfs(board, node->next[board[ii][j]], ii, j);
-                visited[ii][j] = '+';
+
+    void dfs(vector<vector<char>>& board, TrieNode* node, int i, int j) {
+        if (node->isLeaf) {
+            if (node->isOut == false) {
+                ans.emplace_back(node->word);
+                node->isOut = true;
             }
         }
-        for (int jj = j - 1; jj <= j + 1; jj += 2) {
-            if (jj >= 0 && jj < board[0].size() && node->next.count(board[i][jj]) > 0 && visited[i][jj] != '-') {
-                visited[i][jj] = '-';
-                dfs(board, node->next[board[i][jj]], i, jj);
-                visited[i][jj] = '+';
-            } 
+        if (node->children.size() == 0) {
+            return;
         }
+
+        helper(board, node, i, j-1);
+        helper(board, node, i, j+1);
+        helper(board, node, i-1, j);
+        helper(board, node, i+1, j);
+
+    }
+
+    void helper(vector<vector<char>>& board, TrieNode* node, int i, int j) {
+        if (i < 0 || i == board.size() || j < 0 || j == board[0].size())
+            return;
+        if (node->children.find(board[i][j]) == node->children.end())
+            return;
+        if (visited[i][j] == '+')
+            return;
+        visited[i][j] = '+';
+        dfs(board, node->children[board[i][j]], i, j);
+        visited[i][j] = '-';
     }
 };
