@@ -3,15 +3,16 @@
 // The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).
 // The tree has no more than 1,000 nodes and the values are in the range -1,000,000 to 1,000,000.
 
-#include <iostream> 
-#include <vector> 
-#include <unordered_map> 
-using namespace std; 
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
 
 /**
  * Definition for a binary tree node.
  */
-struct TreeNode {
+struct TreeNode
+{
     int val;
     TreeNode *left;
     TreeNode *right;
@@ -20,20 +21,21 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-class Solution {
+class Solution
+{
 public:
-    int ans = 0;
-    void dfs(TreeNode* node, int sum) {
-        if (node == NULL) return; 
-        if (sum == node->val) ans++; 
-        dfs(node->left, sum - node->val);
-        dfs(node->right, sum - node->val);
+    int pathSumWithRoot(TreeNode *root, long long targetSum)
+    {
+        if (!root)
+            return 0;
+        int found = (root->val == targetSum);
+        return found + pathSumWithRoot(root->left, targetSum - root->val) + pathSumWithRoot(root->right, targetSum - root->val);
     }
-    int pathSum(TreeNode* root, int sum) {
-        if (root == NULL) return ans;
-        dfs(root, sum);
-        pathSum(root->left, sum);
-        pathSum(root->right, sum);
-        return ans; 
+
+    int pathSum(TreeNode *root, int targetSum)
+    {
+        if (!root)
+            return 0;
+        return pathSum(root->left, targetSum) + pathSum(root->right, targetSum) + pathSumWithRoot(root, targetSum);
     }
 };
