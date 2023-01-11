@@ -3,14 +3,15 @@
 // Find the total sum of all root-to-leaf numbers.
 // Note: A leaf is a node with no children.
 
-#include <iostream> 
-#include <vector> 
-using namespace std; 
+#include <iostream>
+#include <vector>
+using namespace std;
 
 /**
  * Definition for a binary tree node.
  */
-struct TreeNode {
+struct TreeNode
+{
     int val;
     TreeNode *left;
     TreeNode *right;
@@ -19,32 +20,27 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-class Solution {
+class Solution
+{
 public:
-    int temp;
-    int ans; 
-    void dfs(TreeNode* node) {
-        if (node == NULL) return; 
-        if (node->left == NULL && node->right == NULL) {
-            ans += temp;
-            return; 
-        }
-        int num = temp;
-        if (node->left != NULL) {
-            temp = temp * 10 + node->left->val;
-            dfs(node->left);
-            temp = num;
-        }
-        if (node->right != NULL) {
-            temp = temp * 10 + node->right->val;
-            dfs(node->right);
-            temp = num;
-        }
+    int ans;
+    void dfs(TreeNode *root, int tempSum)
+    {
+        if (!root)
+            return;
+        tempSum *= 10;
+        tempSum += root->val;
+        if (root->left)
+            dfs(root->left, tempSum);
+        if (root->right)
+            dfs(root->right, tempSum);
+        if (!root->left && !root->right)
+            ans += tempSum;
     }
-    int sumNumbers(TreeNode* root) {
+    int sumNumbers(TreeNode *root)
+    {
         ans = 0;
-        if (root == NULL) return ans; 
-        temp = root->val;
-        dfs(root);
+        dfs(root, 0);
+        return ans;
     }
 };
